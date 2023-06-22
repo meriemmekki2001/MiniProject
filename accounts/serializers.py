@@ -1,32 +1,45 @@
-from djoser.serializers import UserCreateSerializer
 from rest_framework import serializers
-from django.contrib.auth import get_user_model
 from .models import User
+from .utils import  generate_otp,send_sms
 
-User = get_user_model()
 
-class UserCreateSerializer(UserCreateSerializer):
-    password_retype = serializers.CharField(write_only=True)
-    user_type = serializers.ChoiceField(choices=User.TYPE, default=User.TYPE[0][0])
 
-    class Meta(UserCreateSerializer.Meta):
+class RegistrationSerializer(serializers.ModelSerializer):
+    class Meta:
         model = User
-        fields = ('email', 'full_name', 'user_type','password','password_retype')
-
-    def validate(self, attrs):
-        attrs = super().validate(attrs)
-
-        password = attrs.get('password')
-        password_retype = attrs.get('password_retype')
-
-        if password != password_retype:
-            raise serializers.ValidationError("Passwords do not match.")
-
-        return attrs
+        fields = ['id','phone_number','full_name']
+        read_only_fields = ['id']
+    
+    def validate(self, data):
+        phone_number = data.get('phone_number')
+        if not phone_number:
+            raise serializers.ValidationError("Phone number is required.")
+        return data
+    
 
 
+class OtpVerificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id','phone_number','verification_code']
+        read_only_fields = ['id']
+    
+    def validate(self, data):
+        phone_number = data.get('phone_number')
+        verification_code = data.get('verification_code')
+        if not phone_number:
+            raise serializers.ValidationError("Please Enter your phone number.")
+        if not verification_code:
+            raise serializers.ValidationError("Please Enter your verification code")
+        return data
 
 
 
 
+    
 
+    
+
+        
+
+    

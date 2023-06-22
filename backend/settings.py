@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+from distutils import config
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -39,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',
     'rest_framework',
-    'djoser',
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
@@ -86,19 +87,11 @@ DATABASES = {
 REST_FRAMEWORK = {
     "COERCE_DECIMAL_TO_STRING": False,
     "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        'rest_framework.authentication.TokenAuthentication',
     ),
 }
 
-DJOSER = {
-  "SERIALIZERS": {
-    "user_create": "accounts.serializers.UserCreateSerializer",
-    },
-}
 
-SIMPLE_JWT = {
-   'AUTH_HEADER_TYPES': ('JWT',),
-}
 
 
 # Password validation
@@ -143,3 +136,9 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = "accounts.User"
+
+
+
+TWILIO_ACCOUNT_SID = 'ACa43af0acd25dea24990d57c88c0441bd'
+TWILIO_AUTH_TOKEN = '05955d3af8aefa8efaa4a1d3df105efe'
+TWILIO_PHONE_NUMBER = '+15418735256'
