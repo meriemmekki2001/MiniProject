@@ -61,9 +61,9 @@ class OtpVerificationView(generics.CreateAPIView):
                         'token': token.key 
                         }
                 else:
-                    response_data = {'message': 'Invalid verification code'}
+                    response_data = {'message': 'This verification code has expired'}
             else:
-                response_data = {'message': 'Invalid verification code'}
+                response_data = {'message': 'Incorrect verification code'}
 
         return Response(response_data, status=status.HTTP_201_CREATED)
 
