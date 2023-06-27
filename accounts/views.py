@@ -60,10 +60,13 @@ class OtpVerificationView(generics.CreateAPIView):
                         'message': 'Successfully logged in',
                         'token': token.key 
                         }
+                    return Response(response_data, status=status.HTTP_200_OK)
                 else:
                     response_data = {'message': 'This verification code has expired'}
+                    return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
             else:
                 response_data = {'message': 'Incorrect verification code'}
+                return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
 
-        return Response(response_data, status=status.HTTP_201_CREATED)
+        
 

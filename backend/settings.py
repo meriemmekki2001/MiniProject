@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
     'accounts',
     'rest_framework',
     'rest_framework.authtoken',
@@ -51,6 +52,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'backend.urls'
@@ -142,3 +145,6 @@ AUTH_USER_MODEL = "accounts.User"
 TWILIO_ACCOUNT_SID = 'ACa43af0acd25dea24990d57c88c0441bd'
 TWILIO_AUTH_TOKEN = '05955d3af8aefa8efaa4a1d3df105efe'
 TWILIO_PHONE_NUMBER = '+15418735256'
+
+
+CORS_ORIGIN_ALLOW_ALL = True
