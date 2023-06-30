@@ -1,13 +1,15 @@
 from datetime import datetime
+from aiohttp import request
 from django.utils import timezone 
 from rest_framework import generics
 from rest_framework.response import Response
-from .serializers import RegistrationSerializer, OtpVerificationSerializer
+from .serializers import RegistrationSerializer, OtpVerificationSerializer,ProfileSerializer
 from .utils import  generate_otp,send_sms
 from .models import User
 from django.utils import timezone
 from rest_framework.authtoken.models import Token
-
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
 from rest_framework import generics, status
 from rest_framework.response import Response
 
@@ -60,6 +62,8 @@ class OtpVerificationView(generics.CreateAPIView):
                         'message': 'Successfully logged in',
                         'token': token.key 
                         }
+                    user.is_active = True
+                    user.save()
                     return Response(response_data, status=status.HTTP_200_OK)
                 else:
                     response_data = {'message': 'This verification code has expired'}
@@ -67,6 +71,32 @@ class OtpVerificationView(generics.CreateAPIView):
             else:
                 response_data = {'message': 'Incorrect verification code'}
                 return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
+            
+
+# class ProfileView(generics.RetrieveUpdateAPIView):
+#     serializer_class = ProfileSerializer
+#     permission_classes = [IsAuthenticated]
+#     def get_queryset(self):
+#         return User.objects.filter(id=self.request.user.id)
+
+
+class ProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        serializer = ProfileSerializer(user)
+        return Response(serializer.data)
+
+    def patch(self, request):
+        user = request.user
+        serializer = ProfileSerializer(user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+    
+
 
         
 

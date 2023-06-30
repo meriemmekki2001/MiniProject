@@ -31,6 +31,12 @@ class OtpVerificationSerializer(serializers.ModelSerializer):
         if not verification_code:
             raise serializers.ValidationError("Please Enter your verification code")
         return data
+    
+
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['full_name','email','phone_number','adress']
 
 
 
